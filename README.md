@@ -172,6 +172,7 @@ All other settings (model choice, temperature, chunk size, retrieval `k`) are ad
 
 | Problem | Cause | Fix |
 |---|---|---|
+| `ModuleNotFoundError: No module named 'langchain.chains'` on Streamlit Cloud but not locally | LangChain 1.0 (Oct 2025) moved legacy chain builders (`create_history_aware_retriever`, `create_retrieval_chain`, `create_stuff_documents_chain`) out of `langchain.chains` into a separate `langchain-classic` package. An unpinned `langchain` in `requirements.txt` can install the newer version on a fresh cloud build even if your local env still has an older one cached. | Already fixed — `src/rag_chain.py` now imports from `langchain_classic.chains`, and `langchain-classic` is in `requirements.txt`. |
 | `Import "src.xxx" could not be resolved` in VS Code | Pylance does static analysis and doesn't see the runtime `sys.path.insert(...)` in `app.py` | Already fixed via `.vscode/settings.json` / `pyrightconfig.json`. If it still shows, run **"Python: Restart Language Server"** from the command palette. |
 | `A Groq API key is required` error | No key in `.env` and none pasted in the sidebar | Add `GROQ_API_KEY` to `.env` or paste one in the sidebar field |
 | `No readable text found in this PDF` | The PDF is scanned/image-only with no extractable text layer | Run it through OCR first, or use a text-based PDF |
