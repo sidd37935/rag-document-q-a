@@ -40,15 +40,17 @@ if "theme" not in st.session_state:
 THEMES = {
     "Dark": {
         "bg": "#0f1117", "bg2": "#14161f", "sidebar_bg": "#12141c",
-        "text": "#f3f4f6", "subtext": "#a3a9b7", "border": "rgba(255,255,255,0.10)",
-        "card_bg": "rgba(255,255,255,0.05)", "accent": "#a78bfa",
+        "text": "#f3f4f6", "subtext": "#c4c9d4", "border": "rgba(255,255,255,0.14)",
+        "card_bg": "rgba(255,255,255,0.06)", "accent": "#a78bfa",
         "chip_bg": "rgba(167,139,250,0.18)", "chip_text": "#ddd6fe", "chip_border": "rgba(167,139,250,0.4)",
+        "input_bg": "#1c1f2b",
     },
     "Light": {
         "bg": "#f7f7fb", "bg2": "#ffffff", "sidebar_bg": "#ffffff",
         "text": "#1a1a2e", "subtext": "#52525b", "border": "rgba(0,0,0,0.10)",
         "card_bg": "#ffffff", "accent": "#6d28d9",
         "chip_bg": "rgba(109,40,217,0.10)", "chip_text": "#5b21b6", "chip_border": "rgba(109,40,217,0.3)",
+        "input_bg": "#ffffff",
     },
 }
 T = THEMES[st.session_state.theme]
@@ -60,7 +62,6 @@ st.markdown(f"""
         color: {T['text']};
     }}
 
-    /* Force readable text everywhere, regardless of Streamlit's own theme */
     [data-testid="stMarkdownContainer"], [data-testid="stMarkdownContainer"] p,
     [data-testid="stMarkdownContainer"] li, [data-testid="stMarkdownContainer"] span,
     h1, h2, h3, h4, h5, h6, label, .stCaption, [data-testid="stCaptionContainer"] {{
@@ -90,17 +91,74 @@ st.markdown(f"""
     .metric-card .val {{ font-size: 1.6rem; font-weight: 700; color: {T['accent']} !important; }}
     .metric-card .lbl {{ font-size: 0.8rem; color: {T['subtext']} !important; text-transform: uppercase; letter-spacing: 0.04em; }}
 
+    /* --- Sidebar: give it an explicit background so custom text colors actually contrast --- */
     section[data-testid="stSidebar"] {{
-        background: {T['sidebar_bg']};
+        background-color: {T['sidebar_bg']} !important;
         border-right: 1px solid {T['border']};
     }}
-    section[data-testid="stSidebar"] * {{ color: {T['text']} !important; }}
-    section[data-testid="stSidebar"] [data-baseweb="select"] * ,
-    section[data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] * ,
-    section[data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"] * ,
-    section[data-testid="stSidebar"] [data-testid="stBaseButton-secondary"] {{
+    section[data-testid="stSidebar"] * {{
         color: {T['text']} !important;
         opacity: 1 !important;
+    }}
+
+    /* Widget labels (e.g. "Model", "Upload one or more PDFs") */
+    section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p,
+    section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] label {{
+        color: {T['text']} !important;
+    }}
+
+    /* Radio / checkbox option text ("Dark", "Light") */
+    section[data-testid="stSidebar"] [data-testid="stRadio"] label,
+    section[data-testid="stSidebar"] [data-testid="stRadio"] label span,
+    section[data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] * {{
+        color: {T['text']} !important;
+    }}
+
+    /* Dropdown / select box */
+    section[data-testid="stSidebar"] [data-baseweb="select"] * ,
+    section[data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] * ,
+    section[data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"] * {{
+        color: {T['text']} !important;
+        opacity: 1 !important;
+    }}
+    section[data-testid="stSidebar"] [data-baseweb="select"] > div ,
+    section[data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] {{
+        background-color: {T['input_bg']} !important;
+        border: 1px solid {T['border']} !important;
+    }}
+
+    /* Expander headers ("Advanced settings", "Use a different key instead") */
+    section[data-testid="stSidebar"] [data-testid="stExpander"] summary,
+    section[data-testid="stSidebar"] [data-testid="stExpander"] summary * {{
+        color: {T['text']} !important;
+    }}
+
+    /* --- Secondary buttons (Clear chat, Reset all, Use a different key) ---
+       Background was never pinned before, so white text sat on Streamlit's
+       default white button bg and only appeared during the brief hover-tint. */
+    section[data-testid="stSidebar"] button[data-testid="stBaseButton-secondary"] {{
+        background-color: {T['input_bg']} !important;
+        border: 1px solid {T['border']} !important;
+        color: {T['text']} !important;
+    }}
+    section[data-testid="stSidebar"] button[data-testid="stBaseButton-secondary"] p,
+    section[data-testid="stSidebar"] button[data-testid="stBaseButton-secondary"] span,
+    section[data-testid="stSidebar"] button[data-testid="stBaseButton-secondary"] div {{
+        color: {T['text']} !important;
+    }}
+    section[data-testid="stSidebar"] button[data-testid="stBaseButton-secondary"]:hover,
+    section[data-testid="stSidebar"] button[data-testid="stBaseButton-secondary"]:focus,
+    section[data-testid="stSidebar"] button[data-testid="stBaseButton-secondary"]:active {{
+        background-color: {T['input_bg']} !important;
+        border-color: {T['accent']} !important;
+        color: {T['text']} !important;
+    }}
+
+    /* Primary button (Process documents) — keep label white in both themes */
+    section[data-testid="stSidebar"] button[data-testid="stBaseButton-primary"] p,
+    section[data-testid="stSidebar"] button[data-testid="stBaseButton-primary"] span,
+    section[data-testid="stSidebar"] button[data-testid="stBaseButton-primary"] div {{
+        color: white !important;
     }}
 
     .source-chip {{
