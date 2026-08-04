@@ -96,8 +96,11 @@ st.markdown(f"""
     }}
     section[data-testid="stSidebar"] * {{ color: {T['text']} !important; }}
     section[data-testid="stSidebar"] [data-baseweb="select"] * ,
-    section[data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] * {{
+    section[data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] * ,
+    section[data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"] * ,
+    section[data-testid="stSidebar"] [data-testid="stBaseButton-secondary"] {{
         color: {T['text']} !important;
+        opacity: 1 !important;
     }}
 
     .source-chip {{
