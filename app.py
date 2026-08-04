@@ -192,7 +192,7 @@ with st.sidebar:
                 for i, f in enumerate(uploaded_files):
                     progress.progress((i) / n, text=f"Reading {f.name}...")
                     splits, num_pages = process_and_split_pdf(
-                        f.getbuffer(), chunk_size=chunk_size, chunk_overlap=chunk_overlap,
+                        f.getvalue(), chunk_size=chunk_size, chunk_overlap=chunk_overlap,
                         display_name=f.name,
                     )
                     all_splits.extend(splits)
