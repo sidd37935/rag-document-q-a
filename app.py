@@ -35,7 +35,7 @@ MODEL_OPTIONS = {
 # Theme (light / dark, high-contrast)
 # --------------------------------------------------------------------------------------
 if "theme" not in st.session_state:
-    st.session_state.theme = "Dark"
+    st.session_state.theme = "Light"
 
 THEMES = {
     "Dark": {
